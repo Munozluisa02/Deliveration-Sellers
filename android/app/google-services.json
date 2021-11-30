@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "92571578364",
+    "project_id": "deliveration-app",
+    "storage_bucket": "deliveration-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92571578364:android:92bfa1307e404c9fcbcc79",
+        "android_client_info": {
+          "package_name": "com.ayl.deliveration_sellers_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92571578364-cat1dpkmca3hosc3u90t6jbnktqd09f2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs6Ou0yYvD5SE20e7WVeuaVeD1AbtxzUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92571578364-cat1dpkmca3hosc3u90t6jbnktqd09f2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
