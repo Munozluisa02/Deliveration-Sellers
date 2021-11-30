@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deliveration_sellers/main_screens/home_screen.dart';
 import 'package:deliveration_sellers/widgets/custom_text_field.dart';
 import 'package:deliveration_sellers/widgets/error_dialog.dart';
 import 'package:deliveration_sellers/widgets/loading_dialog.dart';
@@ -93,6 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             sellerImageUrl = url;
 
             //Save info to firebase
+            authenticateSellerAndSignUp();
           });
         }
         else{
@@ -116,6 +118,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
         );
       }
+    }
+  }
+
+  void authenticateSellerAndSignUp() async {
+    User? currentUser;
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+    await firebaseAuth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+    ).then((auth) {
+      currentUser = auth.user;
+    });
+
+    if(currentUser != null) {
+      saveDataToFirestore(currentUser!).then((value) {
+        Navigator.pop(context);
+        //send user to homepage
+        Route newRoute = MaterialPageRoute(builder: (c) => HomeScreen());
+        Navigator.pushReplacement(context, newRoute);
+      });
     }
   }
 
