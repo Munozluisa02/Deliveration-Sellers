@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:deliveration_sellers/widgets/custom_text_field.dart';
+import 'package:deliveration_sellers/widgets/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -50,6 +51,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String completeAddress = '${pMark.subThoroughfare} ${pMark.thoroughfare}, ${pMark.subLocality} ${pMark.locality}, ${pMark.subAdministrativeArea}, ${pMark.administrativeArea} ${pMark.postalCode}, ${pMark.country}';
 
     locationController.text = completeAddress;
+  }
+
+  Future<void> formValidation() async {
+    if(imageXFile == null){
+      showDialog(
+          context: context,
+          builder: (c) {
+            return ErrorDialog(
+              message: "Please select an image.",
+            );
+          }
+      );
+    }
+    else {
+      if (passwordController.text == confirmPasswordController.text) {
+
+        if(confirmPasswordController.text.isNotEmpty && emailController.text.isNotEmpty && nameController.text.isNotEmpty && phoneController.text.isNotEmpty && locationController.text.isNotEmpty){
+          //start uploading image
+        }
+        else{
+          showDialog(
+              context: context,
+              builder: (c) {
+                return ErrorDialog(
+                  message: "Please write all the required info.",
+                );
+              }
+          );
+        }
+      }
+      else {
+        showDialog(
+            context: context,
+            builder: (c) {
+              return ErrorDialog(
+                message: "Passwords do not match.",
+              );
+            }
+        );
+      }
+    }
   }
 
   @override
@@ -146,7 +188,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 30),
             ElevatedButton(
-                onPressed: () => print("clicked"),
+                onPressed: () {
+                  formValidation();
+                },
                 child: const Text(
                   "Sign Up",
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
