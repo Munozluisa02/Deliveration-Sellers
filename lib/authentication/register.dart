@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deliveration_sellers/global/global.dart';
 import 'package:deliveration_sellers/main_screens/home_screen.dart';
 import 'package:deliveration_sellers/widgets/custom_text_field.dart';
 import 'package:deliveration_sellers/widgets/error_dialog.dart';
@@ -11,6 +12,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fStorage;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -123,13 +125,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void authenticateSellerAndSignUp() async {
     User? currentUser;
-    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
     await firebaseAuth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
     ).then((auth) {
       currentUser = auth.user;
+    }).catchError((error){
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          builder: (c) {
+            return ErrorDialog(
+              message: error.message.toString(),
+            );
+          }
+      );
     });
 
     if(currentUser != null) {
@@ -157,6 +168,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     //Save data locally
+    sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences!.setString("uid", currentUser.uid);
+    await sharedPreferences!.setString("email", currentUser.email.toString());
+    await sharedPreferences!.setString("name", nameController.text.trim());
+    await sharedPreferences!.setString("photoUrl", sellerImageUrl);
   }
 
   @override
